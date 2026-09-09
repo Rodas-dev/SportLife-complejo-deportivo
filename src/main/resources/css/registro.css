@@ -1,7 +1,52 @@
-/*
- * Empty Stylesheet file.
- */
+.fondo-raiz {
+    -fx-background-color: linear-gradient(to bottom right, #e8f5e9, #fff3e0);
+}
 
-.mainFxmlClass {
+.tarjeta {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 4);
+}
 
+.texto-logo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+}
+
+.subtitulo {
+    -fx-font-size: 14px;
+    -fx-text-fill: #616161;
+}
+
+.campo-texto {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-font-size: 13px;
+}
+
+.mensaje-error {
+    -fx-font-size: 12px;
+}
+
+.boton-primario {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+}
+
+.boton-primario:hover {
+    -fx-background-color: #1b5e20;
+}
+
+.boton-enlace {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ef6c00;
+    -fx-underline: true;
+    -fx-cursor: hand;
+    -fx-padding: 0;
 }

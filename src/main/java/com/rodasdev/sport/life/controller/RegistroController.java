@@ -1,110 +1,134 @@
 package main.java.com.rodasdev.sport.life.controller;
 
+import main.java.com.rodasdev.sport.life.model.DataBaseConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import main.java.com.rodasdev.sport.life.model.DataBaseConnection;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class RegistroController {
 
-    @FXML private RadioButton rbUsuario;
-    @FXML private RadioButton rbAdmin;
-    @FXML private ToggleGroup rolToggleGroup;
-    @FXML private TextField txtNombreCompleto;
-    @FXML private TextField txtEmail;
-    @FXML private PasswordField txtPassword;
-    @FXML private PasswordField txtConfirmarPassword;
-    @FXML private TextField txtClaveEspecial;
-    @FXML private Label lblMensaje;
+    private static final String CLAVE_ADMIN = "2026330";
+
+    @FXML
+    private TextField campoNombreCompleto;
+
+    @FXML
+    private TextField campoCorreo;
+
+    @FXML
+    private PasswordField campoContrasena;
+
+    @FXML
+    private PasswordField campoConfirmarContrasena;
+
+    @FXML
+    private TextField campoClaveEspecial;
+
+    @FXML
+    private Label etiquetaMensaje;
+
+    @FXML
+    private Button botonRegistrar;
+
+    @FXML
+    private Button botonIrALogin;
 
     @FXML
     public void initialize() {
-        if (rolToggleGroup != null && rbAdmin != null && txtClaveEspecial != null) {
-            rolToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-                if (rbAdmin.isSelected()) {
-                    txtClaveEspecial.setManaged(true);
-                    txtClaveEspecial.setVisible(true);
-                } else {
-                    txtClaveEspecial.setManaged(false);
-                    txtClaveEspecial.setVisible(false);
-                    txtClaveEspecial.clear();
-                }
-            });
-        }
+        etiquetaMensaje.setText("");
     }
 
     @FXML
-    private void handleRegistrar(ActionEvent event) {
-        String nombre = txtNombreCompleto.getText().trim();
-        String email = txtEmail.getText().trim();
-        String password = txtPassword.getText().trim();
-        String confirmarPass = txtConfirmarPassword.getText().trim();
+    private void alRegistrar(ActionEvent evento) {
+        String nombre = campoNombreCompleto.getText().trim();
+        String correo = campoCorreo.getText().trim();
+        String contrasena = campoContrasena.getText();
+        String confirmacion = campoConfirmarContrasena.getText();
+        String claveIngresada = campoClaveEspecial.getText().trim();
 
-        if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() || confirmarPass.isEmpty()) {
-            lblMensaje.setStyle("-fx-text-fill: red;");
-            lblMensaje.setText("Por favor, completa todos los campos.");
+        if (nombre.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || confirmacion.isEmpty()) {
+            mostrarError("Completa todos los campos.");
             return;
         }
 
-        if (!password.equals(confirmarPass)) {
-            lblMensaje.setStyle("-fx-text-fill: red;");
-            lblMensaje.setText("Las contraseñas no coinciden.");
+        if (!contrasena.equals(confirmacion)) {
+            mostrarError("Las contraseñas no coinciden.");
             return;
         }
 
-        if (rbAdmin != null && rbAdmin.isSelected()) {
-            String claveEspecial = txtClaveEspecial.getText().trim();
-            if (!claveEspecial.equals("ADMIN123")) { 
-                lblMensaje.setStyle("-fx-text-fill: red;");
-                lblMensaje.setText("Clave de administrador incorrecta.");
-                return;
-            }
+        boolean quiereSerAdmin = !claveIngresada.isEmpty();
+
+        if (quiereSerAdmin && !CLAVE_ADMIN.equals(claveIngresada)) {
+            mostrarError("Clave de administrador incorrecta.");
+            return;
         }
 
-        String query = "INSERT INTO usuarios (nombre_completo, email, password_hash) VALUES (?, ?, ?)";
+        String tabla = quiereSerAdmin ? "ADMINISTRADORES" : "USUARIOS";
+        String sql = "INSERT INTO " + tabla + " (nombre_completo, email, password_hash) VALUES (?, ?, ?)";
 
-        try (Connection conn = DataBaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-            
-            pstmt.setString(1, nombre);
-            pstmt.setString(2, email);
-            pstmt.setString(3, password);
+        try (Connection conexion = DataBaseConnection.getDataBaseConnection();
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
 
-            int filasAfectadas = pstmt.executeUpdate();
-            if (filasAfectadas > 0) {
-                lblMensaje.setStyle("-fx-text-fill: green;");
-                lblMensaje.setText("¡Registro exitoso!");
-            }
+            sentencia.setString(1, nombre);
+            sentencia.setString(2, correo);
+            sentencia.setString(3, hashearContrasena(contrasena));
+
+            sentencia.executeUpdate();
+
+            etiquetaMensaje.setStyle("-fx-text-fill: #2e7d32;");
+            etiquetaMensaje.setText("Cuenta creada con éxito. Ya puedes iniciar sesión.");
+
         } catch (SQLException e) {
-            e.printStackTrace();
-            lblMensaje.setStyle("-fx-text-fill: red;");
-            lblMensaje.setText("Error al registrar. El correo ya podría estar registrado.");
+            mostrarError("No se pudo registrar. Verifica si el correo ya existe.");
         }
     }
 
     @FXML
-    private void handleIrALogin(ActionEvent event) {
+    private void alIrALogin(ActionEvent evento) {
+        cambiarEscena(evento, "/main/resources/view/login.fxml");
+    }
+
+    private void mostrarError(String mensaje) {
+        etiquetaMensaje.setStyle("-fx-text-fill: #c62828;");
+        etiquetaMensaje.setText(mensaje);
+    }
+
+    private void cambiarEscena(ActionEvent evento, String rutaFxml) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Sport Life - Login");
-            stage.show();
+            Parent raiz = FXMLLoader.load(getClass().getResource(rutaFxml));
+            Stage escenario = (Stage) ((Button) evento.getSource()).getScene().getWindow();
+            escenario.setScene(new Scene(raiz));
+            escenario.show();
         } catch (IOException e) {
-            e.printStackTrace();
-            lblMensaje.setStyle("-fx-text-fill: red;");
-            lblMensaje.setText("Error al cargar la vista de login.");
+            etiquetaMensaje.setText("No se pudo cargar la vista.");
+        }
+    }
+
+    private String hashearContrasena(String contrasena) {
+        try {
+            MessageDigest digestor = MessageDigest.getInstance("SHA-256");
+            byte[] bytesHash = digestor.digest(contrasena.getBytes());
+            StringBuilder constructor = new StringBuilder();
+            for (byte b : bytesHash) {
+                constructor.append(String.format("%02x", b));
+            }
+            return constructor.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 }
