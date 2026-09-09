@@ -1,0 +1,11 @@
+#archivos de compilacion
+/build/
+/dist/
+/nbproject/private
+
+#clases autogeneradas
+*.class
+*.jar
+
+Crendentials.java
+**/Crendentials.java
