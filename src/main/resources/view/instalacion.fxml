@@ -3,11 +3,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -15,111 +17,126 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="950.0" spacing="15.0" style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.com.rodasdev.sport.life.controller.InstalacionController">
-   <padding>
-      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
-   </padding>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="950.0" style="-fx-background-color: #f4f6f9;" stylesheets="@../css/instalacion.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.com.rodasdev.sport.life.controller.InstalacionController">
 
-   <VBox prefHeight="520.0" prefWidth="340.0" spacing="10.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
-      <children>
-         <Label text="Gestión de Instalaciones">
-            <font>
-               <Font name="System Bold" size="16.0"/>
-            </font>
-         </Label>
+   <top>
+      <HBox alignment="CENTER_LEFT" spacing="10" styleClass="barra-superior">
+         <padding>
+            <Insets bottom="15" left="25" right="25" top="15" />
+         </padding>
+         <Label styleClass="texto-logo-chico" text="Panel de Administrador" HBox.hgrow="ALWAYS" />
+         <Button fx:id="botonCerrarSesion" onAction="#alCerrarSesion" styleClass="boton-enlace" text="Cerrar sesión" />
+      </HBox>
+   </top>
 
-         <GridPane hgap="8.0" vgap="8.0">
-           <columnConstraints>
-             <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="110.0"/>
-             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="190.0"/>
-           </columnConstraints>
-           <rowConstraints>
-             <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-             <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-             <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-             <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-             <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-             <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-             <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-             <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-           </rowConstraints>
+   <center>
+      <HBox spacing="15.0">
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+         </padding>
+
+         <VBox prefHeight="520.0" prefWidth="340.0" spacing="10.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
             <children>
-               <Label text="Código:"/>
-               <TextField GridPane.columnIndex="1" fx:id="txtCodigo" promptText="Ej. CBK-01"/>
-
-               <Label GridPane.rowIndex="1" text="ID Tipo Deporte:"/>
-               <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="txtTipoDeporte" promptText="Ej. 3"/>
-
-               <Label GridPane.rowIndex="2" text="ID Admin:"/>
-               <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="txtAdmin" promptText="Ej. 2"/>
-
-               <Label GridPane.rowIndex="3" text="Descripción:"/>
-               <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="txtDescripcion" promptText="Nombre de la cancha"/>
-
-               <Label GridPane.rowIndex="4" text="¿Es Techada?"/>
-               <CheckBox GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="chkTechada" text="Sí / No"/>
-
-               <Label GridPane.rowIndex="5" text="Precio por Hora:"/>
-               <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" fx:id="txtPrecioHora" promptText="0.00"/>
-
-               <Label GridPane.rowIndex="6" text="Foto URL:"/>
-               <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="txtFotoUrl" promptText="img/cancha.jpg" editable="false"/>
-
-               <Label GridPane.rowIndex="7" text="¿Habilitada?"/>
-               <CheckBox GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="chkHabilitada" selected="true" text="Activa"/>
-            </children>
-         </GridPane>
-
-         <HBox alignment="CENTER_LEFT" spacing="10.0">
-            <children>
-               <ImageView fx:id="imgVistaPrevia" fitHeight="70.0" fitWidth="100.0" preserveRatio="true"/>
-               <Button fx:id="btnSeleccionarFoto" mnemonicParsing="false" onAction="#handleSeleccionarFoto" text="Seleccionar foto"/>
-            </children>
-         </HBox>
-
-         <VBox VBox.vgrow="ALWAYS" spacing="8.0">
-            <children>
-               <HBox spacing="10.0">
-                  <children>
-                     <Button HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCrear" style="-fx-background-color: #2ecc71; -fx-text-fill: white;" text="Crear"/>
-                     <Button HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleActualizar" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Actualizar"/>
-                  </children>
-               </HBox>
-               <HBox spacing="10.0">
-                  <children>
-                     <Button HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleDeshabilitar" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Deshabilitar"/>
-                     <Button HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#limpiarCampos" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Limpiar"/>
-                  </children>
-               </HBox>
-               <Label fx:id="lblMensaje" wrapText="true">
+               <Label text="Gestión de Instalaciones">
                   <font>
-                     <Font name="System Italic" size="12.0"/>
+                     <Font name="System Bold" size="16.0"/>
                   </font>
                </Label>
-            </children>
-            <padding>
-               <Insets top="10.0"/>
-            </padding>
-         </VBox>
-      </children>
-   </VBox>
 
-   <VBox HBox.hgrow="ALWAYS">
-      <children>
-         <TableView VBox.vgrow="ALWAYS" fx:id="tablaInstalaciones" prefHeight="520.0">
-           <columns>
-             <TableColumn fx:id="colCodigo" prefWidth="75.0" text="Código"/>
-             <TableColumn fx:id="colDescripcion" prefWidth="180.0" text="Descripción"/>
-             <TableColumn fx:id="colTipoDeporte" prefWidth="65.0" text="T. Deporte"/>
-             <TableColumn fx:id="colAdmin" prefWidth="55.0" text="Admin"/>
-             <TableColumn fx:id="colTechada" prefWidth="65.0" text="Techada"/>
-             <TableColumn fx:id="colPrecio" prefWidth="75.0" text="Precio/h"/>
-             <TableColumn fx:id="colHabilitada" prefWidth="75.0" text="Habilitada"/>
-           </columns>
-            <columnResizePolicy>
-               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
-         </TableView>
-      </children>
-   </VBox>
-</HBox>
+               <GridPane hgap="8.0" vgap="8.0">
+                 <columnConstraints>
+                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="110.0"/>
+                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="190.0"/>
+                 </columnConstraints>
+                 <rowConstraints>
+                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                 </rowConstraints>
+                  <children>
+                     <Label text="Código:"/>
+                     <TextField GridPane.columnIndex="1" fx:id="txtCodigo" promptText="Ej. CBK-01"/>
+
+                     <Label GridPane.rowIndex="1" text="Tipo de Deporte:"/>
+                     <ComboBox GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="comboTipoDeporte" maxWidth="1.7976931348623157E308" styleClass="combo-azul"/>
+
+                     <Label GridPane.rowIndex="2" text="ID Admin:"/>
+                     <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="txtAdmin" promptText="Ej. 2"/>
+
+                     <Label GridPane.rowIndex="3" text="Descripción:"/>
+                     <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="txtDescripcion" promptText="Nombre de la cancha"/>
+
+                     <Label GridPane.rowIndex="4" text="¿Es Techada?"/>
+                     <CheckBox GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="chkTechada" text="Sí / No"/>
+
+                     <Label GridPane.rowIndex="5" text="Precio por Hora:"/>
+                     <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" fx:id="txtPrecioHora" promptText="0.00"/>
+
+                     <Label GridPane.rowIndex="6" text="Foto URL:"/>
+                     <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="txtFotoUrl" editable="false" promptText="img/cancha.jpg"/>
+
+                     <Label GridPane.rowIndex="7" text="¿Habilitada?"/>
+                     <CheckBox GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="chkHabilitada" selected="true" text="Activa"/>
+                  </children>
+               </GridPane>
+
+               <HBox alignment="CENTER_LEFT" spacing="10.0">
+                  <children>
+                     <ImageView fx:id="imgVistaPrevia" fitHeight="70.0" fitWidth="100.0" preserveRatio="true"/>
+                     <Button fx:id="btnSeleccionarFoto" mnemonicParsing="false" onAction="#handleSeleccionarFoto" text="Seleccionar foto"/>
+                  </children>
+               </HBox>
+
+               <VBox VBox.vgrow="ALWAYS" spacing="8.0">
+                  <children>
+                     <HBox spacing="10.0">
+                        <children>
+                           <Button HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCrear" style="-fx-background-color: #2ecc71; -fx-text-fill: white;" text="Crear"/>
+                           <Button HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleActualizar" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Actualizar"/>
+                        </children>
+                     </HBox>
+                     <HBox spacing="10.0">
+                        <children>
+                           <Button HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleDeshabilitar" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Deshabilitar"/>
+                           <Button HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#limpiarCampos" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Limpiar"/>
+                        </children>
+                     </HBox>
+                     <Label fx:id="lblMensaje" wrapText="true">
+                        <font>
+                           <Font name="System Italic" size="12.0"/>
+                        </font>
+                     </Label>
+                  </children>
+                  <padding>
+                     <Insets top="10.0"/>
+                  </padding>
+               </VBox>
+            </children>
+         </VBox>
+
+         <VBox HBox.hgrow="ALWAYS">
+            <children>
+               <TableView VBox.vgrow="ALWAYS" fx:id="tablaInstalaciones" prefHeight="520.0" styleClass="tabla-instalaciones">
+                 <columns>
+                   <TableColumn fx:id="colCodigo" prefWidth="75.0" text="Código"/>
+                   <TableColumn fx:id="colDescripcion" prefWidth="180.0" text="Descripción"/>
+                   <TableColumn fx:id="colTipoDeporte" prefWidth="65.0" text="T. Deporte"/>
+                   <TableColumn fx:id="colAdmin" prefWidth="55.0" text="Admin"/>
+                   <TableColumn fx:id="colTechada" prefWidth="65.0" text="Techada"/>
+                   <TableColumn fx:id="colPrecio" prefWidth="75.0" text="Precio/h"/>
+                   <TableColumn fx:id="colHabilitada" prefWidth="75.0" text="Habilitada"/>
+                 </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                  </columnResizePolicy>
+               </TableView>
+            </children>
+         </VBox>
+      </HBox>
+   </center>
+</BorderPane>

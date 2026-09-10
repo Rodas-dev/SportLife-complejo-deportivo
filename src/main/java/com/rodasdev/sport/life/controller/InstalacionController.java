@@ -9,10 +9,14 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import main.java.com.rodasdev.sport.life.model.DataBaseConnection;
 import main.java.com.rodasdev.sport.life.model.InstalacionDeportiva;
-
+import main.java.com.rodasdev.sport.life.model.TipoDeporte;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import java.io.File;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,7 +36,7 @@ public class InstalacionController {
     @FXML private TableColumn<InstalacionDeportiva, Boolean> colHabilitada;
 
     @FXML private TextField txtCodigo;
-    @FXML private TextField txtTipoDeporte;
+    @FXML private ComboBox<TipoDeporte> comboTipoDeporte;
     @FXML private TextField txtAdmin;
     @FXML private TextField txtDescripcion;
     @FXML private CheckBox chkTechada;
@@ -44,6 +48,7 @@ public class InstalacionController {
     @FXML private Button btnSeleccionarFoto;
 
     private ObservableList<InstalacionDeportiva> listaInstalaciones = FXCollections.observableArrayList();
+    private ObservableList<TipoDeporte> listaTiposDeporte = FXCollections.observableArrayList();
     private InstalacionDeportiva instalacionSeleccionada = null;
     private File archivoFotoSeleccionado = null;
 
@@ -57,6 +62,7 @@ public class InstalacionController {
         colPrecio.setCellValueFactory(cellData -> new javafx.beans.property.SimpleDoubleProperty(cellData.getValue().getPrecioHora()));
         colHabilitada.setCellValueFactory(cellData -> new javafx.beans.property.SimpleBooleanProperty(cellData.getValue().isHabilitada()));
 
+        cargarTiposDeporte();
         cargarInstalaciones();
 
         tablaInstalaciones.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -64,7 +70,7 @@ public class InstalacionController {
                 instalacionSeleccionada = newVal;
                 txtCodigo.setText(newVal.getIdCodigoInstalacion());
                 txtCodigo.setDisable(true);
-                txtTipoDeporte.setText(String.valueOf(newVal.getIdTipoDeporte()));
+                seleccionarTipoDeportePorId(newVal.getIdTipoDeporte());
                 txtAdmin.setText(String.valueOf(newVal.getIdAdmin()));
                 txtDescripcion.setText(newVal.getDescripcion());
                 chkTechada.setSelected(newVal.isEsTechada());
@@ -77,6 +83,35 @@ public class InstalacionController {
         });
 
         limpiarCampos();
+    }
+
+    private void cargarTiposDeporte() {
+        listaTiposDeporte.clear();
+        String query = "SELECT id_tipo_deporte, nombre_deporte FROM tipo_deporte";
+
+        try (Connection conn = DataBaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                listaTiposDeporte.add(new TipoDeporte(rs.getInt("id_tipo_deporte"), rs.getString("nombre_deporte")));
+            }
+            comboTipoDeporte.setItems(listaTiposDeporte);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            lblMensaje.setStyle("-fx-text-fill: red;");
+            lblMensaje.setText("Error al cargar los tipos de deporte.");
+        }
+    }
+
+    private void seleccionarTipoDeportePorId(int idTipoDeporte) {
+        for (TipoDeporte tipo : listaTiposDeporte) {
+            if (tipo.getIdTipoDeporte() == idTipoDeporte) {
+                comboTipoDeporte.setValue(tipo);
+                return;
+            }
+        }
+        comboTipoDeporte.setValue(null);
     }
 
     @FXML
@@ -162,6 +197,12 @@ public class InstalacionController {
 
     @FXML
     private void handleCrear() {
+        if (comboTipoDeporte.getValue() == null) {
+            lblMensaje.setStyle("-fx-text-fill: red;");
+            lblMensaje.setText("Selecciona un tipo de deporte.");
+            return;
+        }
+
         String nombreFoto = copiarFotoAResources(txtCodigo.getText().trim());
         String query = "INSERT INTO instalaciones_deportivas (id_codigo_instalacion, id_tipo_deporte, id_admin, descripcion, es_techada, precio_hora, foto_url, habilitada) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -169,7 +210,7 @@ public class InstalacionController {
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setString(1, txtCodigo.getText().trim());
-            pstmt.setInt(2, Integer.parseInt(txtTipoDeporte.getText().trim()));
+            pstmt.setInt(2, comboTipoDeporte.getValue().getIdTipoDeporte());
             pstmt.setInt(3, Integer.parseInt(txtAdmin.getText().trim()));
             pstmt.setString(4, txtDescripcion.getText().trim());
             pstmt.setBoolean(5, chkTechada.isSelected());
@@ -196,6 +237,11 @@ public class InstalacionController {
             lblMensaje.setText("Selecciona una instalación de la tabla para actualizar.");
             return;
         }
+        if (comboTipoDeporte.getValue() == null) {
+            lblMensaje.setStyle("-fx-text-fill: red;");
+            lblMensaje.setText("Selecciona un tipo de deporte.");
+            return;
+        }
 
         String nombreFoto = copiarFotoAResources(instalacionSeleccionada.getIdCodigoInstalacion());
         String query = "UPDATE instalaciones_deportivas SET id_tipo_deporte = ?, id_admin = ?, descripcion = ?, es_techada = ?, precio_hora = ?, foto_url = ?, habilitada = ? WHERE id_codigo_instalacion = ?";
@@ -203,7 +249,7 @@ public class InstalacionController {
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-            pstmt.setInt(1, Integer.parseInt(txtTipoDeporte.getText().trim()));
+            pstmt.setInt(1, comboTipoDeporte.getValue().getIdTipoDeporte());
             pstmt.setInt(2, Integer.parseInt(txtAdmin.getText().trim()));
             pstmt.setString(3, txtDescripcion.getText().trim());
             pstmt.setBoolean(4, chkTechada.isSelected());
@@ -254,7 +300,7 @@ public class InstalacionController {
     private void limpiarCampos() {
         txtCodigo.clear();
         txtCodigo.setDisable(false);
-        txtTipoDeporte.clear();
+        comboTipoDeporte.setValue(null);
         txtAdmin.clear();
         txtDescripcion.clear();
         chkTechada.setSelected(false);
@@ -268,4 +314,21 @@ public class InstalacionController {
             tablaInstalaciones.getSelectionModel().clearSelection();
         }
     }
+    
+    @FXML
+private void alCerrarSesion(ActionEvent evento) {
+    try {
+        FXMLLoader cargador = new FXMLLoader(getClass().getResource("/main/resources/view/login.fxml"));
+        Parent raiz = cargador.load();
+
+        Stage escenario = (Stage) ((Button) evento.getSource()).getScene().getWindow();
+        Scene escena = new Scene(raiz, 950, 850);
+        escenario.setScene(escena);
+        escenario.setMinWidth(950);
+        escenario.setMinHeight(850);
+        escenario.centerOnScreen();
+        escenario.show();
+    } catch (Exception e) {
+    }
+}
 }
