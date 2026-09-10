@@ -9,8 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class ClienteController {
 
     @FXML
@@ -36,24 +34,49 @@ public class ClienteController {
 
     @FXML
     private void alReservarCancha(ActionEvent evento) {
+        try {
+            FXMLLoader cargador = new FXMLLoader(getClass().getResource("/main/resources/view/reservar.fxml"));
+            Parent raiz = cargador.load();
+
+            ReservarController controlador = cargador.getController();
+            controlador.inicializarUsuario(idUsuario, nombreUsuario);
+
+            cambiarEscena(evento, raiz);
+        } catch (Exception e) {
+        }
     }
 
     @FXML
     private void alVerMisReservas(ActionEvent evento) {
+        try {
+            FXMLLoader cargador = new FXMLLoader(getClass().getResource("/main/resources/view/mis-reservas.fxml"));
+            Parent raiz = cargador.load();
+
+            MisReservasController controlador = cargador.getController();
+            controlador.inicializarUsuario(idUsuario, nombreUsuario);
+
+            cambiarEscena(evento, raiz);
+        } catch (Exception e) {
+        }
     }
 
     @FXML
     private void alCerrarSesion(ActionEvent evento) {
-        cambiarEscena(evento, "/main/resources/view/login.fxml");
+        try {
+            FXMLLoader cargador = new FXMLLoader(getClass().getResource("/main/resources/view/login.fxml"));
+            Parent raiz = cargador.load();
+            cambiarEscena(evento, raiz);
+        } catch (Exception e) {
+        }
     }
 
-    private void cambiarEscena(ActionEvent evento, String rutaFxml) {
-        try {
-            Parent raiz = FXMLLoader.load(getClass().getResource(rutaFxml));
-            Stage escenario = (Stage) ((Button) evento.getSource()).getScene().getWindow();
-            escenario.setScene(new Scene(raiz));
-            escenario.show();
-        } catch (IOException e) {
-        }
+    private void cambiarEscena(ActionEvent evento, Parent raiz) {
+        Stage escenario = (Stage) ((Button) evento.getSource()).getScene().getWindow();
+        Scene escena = new Scene(raiz, 950, 850);
+        escenario.setScene(escena);
+        escenario.setMinWidth(950);
+        escenario.setMinHeight(850);
+        escenario.centerOnScreen();
+        escenario.show();
     }
 }

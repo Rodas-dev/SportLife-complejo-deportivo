@@ -1,0 +1,88 @@
+.fondo-raiz {
+    -fx-background-color: linear-gradient(to bottom right, #fff3e0, #e8f5e9);
+}
+
+.barra-superior {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+}
+
+.texto-logo-chico {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ef6c00;
+}
+
+.boton-enlace {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2e7d32;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.tarjeta-imagen {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);
+    -fx-padding: 20;
+    -fx-max-width: 340;
+}
+
+.titulo-cancha {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e2e2e;
+}
+
+.dato-cancha {
+    -fx-font-size: 13px;
+    -fx-text-fill: #757575;
+}
+
+.tarjeta-formulario {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);
+    -fx-padding: 24;
+    -fx-min-width: 320;
+}
+
+.subtitulo {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #424242;
+}
+
+.campo-fecha, .campo-combo {
+    -fx-background-radius: 8;
+    -fx-font-size: 13px;
+}
+
+.etiqueta-ocupados {
+    -fx-font-size: 12px;
+    -fx-text-fill: #c62828;
+}
+
+.mensaje-error {
+    -fx-font-size: 12px;
+    -fx-text-fill: #c62828;
+}
+
+.monto-total {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+}
+
+.boton-primario {
+    -fx-background-color: #ef6c00;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+}
+
+.boton-primario:hover {
+    -fx-background-color: #e65100;
+}

@@ -4,9 +4,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import main.java.com.rodasdev.sport.life.model.DataBaseConnection;
 import main.java.com.rodasdev.sport.life.model.InstalacionDeportiva;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.*;
 
 public class InstalacionController {
@@ -29,9 +40,12 @@ public class InstalacionController {
     @FXML private TextField txtFotoUrl;
     @FXML private CheckBox chkHabilitada;
     @FXML private Label lblMensaje;
+    @FXML private ImageView imgVistaPrevia;
+    @FXML private Button btnSeleccionarFoto;
 
     private ObservableList<InstalacionDeportiva> listaInstalaciones = FXCollections.observableArrayList();
     private InstalacionDeportiva instalacionSeleccionada = null;
+    private File archivoFotoSeleccionado = null;
 
     @FXML
     public void initialize() {
@@ -57,10 +71,64 @@ public class InstalacionController {
                 txtPrecioHora.setText(String.valueOf(newVal.getPrecioHora()));
                 txtFotoUrl.setText(newVal.getFotoUrl());
                 chkHabilitada.setSelected(newVal.isHabilitada());
+                archivoFotoSeleccionado = null;
+                mostrarVistaPreviaExistente(newVal.getFotoUrl());
             }
         });
-        
+
         limpiarCampos();
+    }
+
+    @FXML
+    private void handleSeleccionarFoto() {
+        FileChooser selector = new FileChooser();
+        selector.setTitle("Selecciona la foto de la cancha");
+        selector.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg"));
+
+        File archivo = selector.showOpenDialog(btnSeleccionarFoto.getScene().getWindow());
+        if (archivo != null) {
+            archivoFotoSeleccionado = archivo;
+            imgVistaPrevia.setImage(new Image(archivo.toURI().toString()));
+        }
+    }
+
+    private void mostrarVistaPreviaExistente(String nombreArchivo) {
+        if (nombreArchivo == null || nombreArchivo.isBlank()) {
+            imgVistaPrevia.setImage(null);
+            return;
+        }
+        InputStream recurso = getClass().getResourceAsStream("/main/resources/imagenes/" + nombreArchivo);
+        if (recurso != null) {
+            imgVistaPrevia.setImage(new Image(recurso));
+        } else {
+            imgVistaPrevia.setImage(null);
+        }
+    }
+
+    private String copiarFotoAResources(String codigoInstalacion) {
+        if (archivoFotoSeleccionado == null) {
+            return txtFotoUrl.getText().trim();
+        }
+        try {
+            String nombreOriginal = archivoFotoSeleccionado.getName();
+            String extension = nombreOriginal.substring(nombreOriginal.lastIndexOf('.'));
+            String nombreArchivo = codigoInstalacion + extension;
+
+            Path carpetaFuente = Paths.get("src/main/resources/imagenes");
+            Files.createDirectories(carpetaFuente);
+            Files.copy(archivoFotoSeleccionado.toPath(), carpetaFuente.resolve(nombreArchivo), StandardCopyOption.REPLACE_EXISTING);
+
+            URL recursoClasses = getClass().getResource("/main/resources/imagenes/");
+            if (recursoClasses != null) {
+                Path carpetaClasses = Paths.get(recursoClasses.toURI());
+                Files.copy(archivoFotoSeleccionado.toPath(), carpetaClasses.resolve(nombreArchivo), StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            return nombreArchivo;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return txtFotoUrl.getText().trim();
+        }
     }
 
     @FXML
@@ -94,6 +162,7 @@ public class InstalacionController {
 
     @FXML
     private void handleCrear() {
+        String nombreFoto = copiarFotoAResources(txtCodigo.getText().trim());
         String query = "INSERT INTO instalaciones_deportivas (id_codigo_instalacion, id_tipo_deporte, id_admin, descripcion, es_techada, precio_hora, foto_url, habilitada) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -105,7 +174,7 @@ public class InstalacionController {
             pstmt.setString(4, txtDescripcion.getText().trim());
             pstmt.setBoolean(5, chkTechada.isSelected());
             pstmt.setDouble(6, Double.parseDouble(txtPrecioHora.getText().trim()));
-            pstmt.setString(7, txtFotoUrl.getText().trim());
+            pstmt.setString(7, nombreFoto);
             pstmt.setBoolean(8, chkHabilitada.isSelected());
 
             pstmt.executeUpdate();
@@ -128,6 +197,7 @@ public class InstalacionController {
             return;
         }
 
+        String nombreFoto = copiarFotoAResources(instalacionSeleccionada.getIdCodigoInstalacion());
         String query = "UPDATE instalaciones_deportivas SET id_tipo_deporte = ?, id_admin = ?, descripcion = ?, es_techada = ?, precio_hora = ?, foto_url = ?, habilitada = ? WHERE id_codigo_instalacion = ?";
 
         try (Connection conn = DataBaseConnection.getConnection();
@@ -138,7 +208,7 @@ public class InstalacionController {
             pstmt.setString(3, txtDescripcion.getText().trim());
             pstmt.setBoolean(4, chkTechada.isSelected());
             pstmt.setDouble(5, Double.parseDouble(txtPrecioHora.getText().trim()));
-            pstmt.setString(6, txtFotoUrl.getText().trim());
+            pstmt.setString(6, nombreFoto);
             pstmt.setBoolean(7, chkHabilitada.isSelected());
             pstmt.setString(8, instalacionSeleccionada.getIdCodigoInstalacion());
 
@@ -192,6 +262,8 @@ public class InstalacionController {
         txtFotoUrl.clear();
         chkHabilitada.setSelected(true);
         instalacionSeleccionada = null;
+        archivoFotoSeleccionado = null;
+        imgVistaPrevia.setImage(null);
         if (tablaInstalaciones != null) {
             tablaInstalaciones.getSelectionModel().clearSelection();
         }

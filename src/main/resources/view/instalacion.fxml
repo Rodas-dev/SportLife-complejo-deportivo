@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -18,8 +19,7 @@
    <padding>
       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
    </padding>
-   
-   <!-- Panel Izquierdo: Formulario -->
+
    <VBox prefHeight="520.0" prefWidth="340.0" spacing="10.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
       <children>
          <Label text="Gestión de Instalaciones">
@@ -27,7 +27,7 @@
                <Font name="System Bold" size="16.0"/>
             </font>
          </Label>
-         
+
          <GridPane hgap="8.0" vgap="8.0">
            <columnConstraints>
              <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="110.0"/>
@@ -46,31 +46,37 @@
             <children>
                <Label text="Código:"/>
                <TextField GridPane.columnIndex="1" fx:id="txtCodigo" promptText="Ej. CBK-01"/>
-               
+
                <Label GridPane.rowIndex="1" text="ID Tipo Deporte:"/>
                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="txtTipoDeporte" promptText="Ej. 3"/>
-               
+
                <Label GridPane.rowIndex="2" text="ID Admin:"/>
                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="txtAdmin" promptText="Ej. 2"/>
-               
+
                <Label GridPane.rowIndex="3" text="Descripción:"/>
                <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="txtDescripcion" promptText="Nombre de la cancha"/>
-               
+
                <Label GridPane.rowIndex="4" text="¿Es Techada?"/>
                <CheckBox GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="chkTechada" text="Sí / No"/>
-               
+
                <Label GridPane.rowIndex="5" text="Precio por Hora:"/>
                <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" fx:id="txtPrecioHora" promptText="0.00"/>
-               
+
                <Label GridPane.rowIndex="6" text="Foto URL:"/>
-               <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="txtFotoUrl" promptText="img/cancha.jpg"/>
-               
+               <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="txtFotoUrl" promptText="img/cancha.jpg" editable="false"/>
+
                <Label GridPane.rowIndex="7" text="¿Habilitada?"/>
                <CheckBox GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="chkHabilitada" selected="true" text="Activa"/>
             </children>
          </GridPane>
 
-         <!-- Botones de Acción -->
+         <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <children>
+               <ImageView fx:id="imgVistaPrevia" fitHeight="70.0" fitWidth="100.0" preserveRatio="true"/>
+               <Button fx:id="btnSeleccionarFoto" mnemonicParsing="false" onAction="#handleSeleccionarFoto" text="Seleccionar foto"/>
+            </children>
+         </HBox>
+
          <VBox VBox.vgrow="ALWAYS" spacing="8.0">
             <children>
                <HBox spacing="10.0">
@@ -98,7 +104,6 @@
       </children>
    </VBox>
 
-   <!-- Panel Derecho: Tabla de Registros -->
    <VBox HBox.hgrow="ALWAYS">
       <children>
          <TableView VBox.vgrow="ALWAYS" fx:id="tablaInstalaciones" prefHeight="520.0">
