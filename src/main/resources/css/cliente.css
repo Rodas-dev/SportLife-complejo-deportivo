@@ -1,0 +1,65 @@
+.fondo-raiz {
+    -fx-background-color: linear-gradient(to bottom right, #fff3e0, #e8f5e9);
+}
+
+.barra-superior {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+}
+
+.texto-logo-chico {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ef6c00;
+}
+
+.etiqueta-bienvenida {
+    -fx-font-size: 14px;
+    -fx-text-fill: #424242;
+    -fx-alignment: CENTER;
+}
+
+.tarjeta {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 4);
+    -fx-max-width: 400;
+}
+
+.subtitulo {
+    -fx-font-size: 16px;
+    -fx-text-fill: #616161;
+}
+
+.boton-primario {
+    -fx-background-color: #ef6c00;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+}
+
+.boton-primario:hover {
+    -fx-background-color: #e65100;
+}
+
+.boton-secundario {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+}
+
+.boton-secundario:hover {
+    -fx-background-color: #1b5e20;
+}
+
+.boton-enlace {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ef6c00;
+    -fx-underline: true;
+    -fx-cursor: hand;
+}

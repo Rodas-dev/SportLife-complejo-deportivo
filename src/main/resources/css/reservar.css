@@ -1,0 +1,66 @@
+.fondo-raiz {
+    -fx-background-color: linear-gradient(to bottom right, #fff3e0, #e8f5e9);
+}
+
+.barra-superior {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+}
+
+.texto-logo-chico {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ef6c00;
+}
+
+.scroll-transparente {
+    -fx-background-color: transparent;
+}
+
+.contenedor-canchas {
+    -fx-background-color: transparent;
+}
+
+.tarjeta-cancha {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);
+    -fx-padding: 14;
+}
+
+.titulo-cancha {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e2e2e;
+}
+
+.dato-cancha {
+    -fx-font-size: 12px;
+    -fx-text-fill: #757575;
+}
+
+.precio-cancha {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+}
+
+.boton-primario {
+    -fx-background-color: #ef6c00;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 10 16 10 16;
+    -fx-cursor: hand;
+}
+
+.boton-primario:hover {
+    -fx-background-color: #e65100;
+}
+
+.boton-enlace {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2e7d32;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}

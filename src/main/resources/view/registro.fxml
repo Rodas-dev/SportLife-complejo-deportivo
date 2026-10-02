@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="raizRegistro" styleClass="fondo-raiz" stylesheets="@../css/registro.css"
+           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="main.java.com.rodasdev.sport.life.controller.RegistroController">
+    <VBox alignment="CENTER" maxWidth="380" spacing="14" styleClass="tarjeta">
+        <padding>
+            <Insets bottom="30" left="30" right="30" top="30" />
+        </padding>
+
+        <Label styleClass="texto-logo" text="Crear cuenta" />
+        <Label styleClass="subtitulo" text="Únete a SportLife" />
+
+        <TextField fx:id="campoNombreCompleto" promptText="Nombre completo" styleClass="campo-texto" />
+        <TextField fx:id="campoCorreo" promptText="Correo electrónico" styleClass="campo-texto" />
+        <PasswordField fx:id="campoContrasena" promptText="Contraseña" styleClass="campo-texto" />
+        <PasswordField fx:id="campoConfirmarContrasena" promptText="Confirmar contraseña" styleClass="campo-texto" />
+
+        <TextField fx:id="campoClaveEspecial" promptText="Clave de administrador (opcional)" styleClass="campo-texto" />
+
+        <Label fx:id="etiquetaMensaje" styleClass="mensaje-error" wrapText="true" />
+
+        <Button fx:id="botonRegistrar" maxWidth="Infinity" onAction="#alRegistrar"
+                styleClass="boton-primario" text="Registrarse" />
+
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="¿Ya tienes cuenta?" />
+            <Button fx:id="botonIrALogin" onAction="#alIrALogin" styleClass="boton-enlace" text="Inicia sesión" />
+        </HBox>
+    </VBox>
+</StackPane>

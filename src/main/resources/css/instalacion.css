@@ -1,0 +1,67 @@
+.tabla-instalaciones {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #90caf9;
+    -fx-border-width: 1;
+}
+
+.tabla-instalaciones .column-header-background {
+    -fx-background-color: #1565c0;
+    -fx-background-radius: 0;
+}
+
+.tabla-instalaciones .column-header,
+.tabla-instalaciones .filler {
+    -fx-background-color: #1565c0;
+    -fx-border-color: transparent #0d47a1 transparent transparent;
+}
+
+.tabla-instalaciones .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.tabla-instalaciones .table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: transparent transparent #e3f2fd transparent;
+}
+
+.tabla-instalaciones .table-row-cell:odd {
+    -fx-background-color: #f5f9ff;
+}
+
+.tabla-instalaciones .table-row-cell:selected {
+    -fx-background-color: #90caf9;
+}
+
+.tabla-instalaciones .table-row-cell:selected .text {
+    -fx-fill: #0d47a1;
+}
+
+.combo-azul {
+    -fx-background-color: white;
+    -fx-border-color: #90caf9;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.combo-azul:focused {
+    -fx-border-color: #1565c0;
+}
+.barra-superior {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+}
+
+.texto-logo-chico {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1565c0;
+}
+
+.boton-enlace {
+    -fx-background-color: transparent;
+    -fx-text-fill: #c62828;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
